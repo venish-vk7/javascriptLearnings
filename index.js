@@ -4,14 +4,24 @@
  * PORT 8080
  */
 const http = require('http');
-var fs = require('fs');
-const port = 5000;
+var express = require('express');
+var path = require('path');
+var app = express();
+const PORT = 8080;
 
-http.createServer(function (req, res) {
-    fs.readFile('index.html', function(err, data) {
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.write(data);
-      res.end();
-    });
-  }).listen(port);
-  console.log("app started" , port)
+// Configuring the static file here
+app.use(express.static('public'))
+
+// Handling the request items here
+app.get('/view' , (req ,res) => {
+ res.sendFile(path.join(__dirname + '/public/view.html'))
+})
+
+app.get('*' , (req , res) => {
+    res.redirect('/')
+})
+
+//Port configuration here
+app.listen(PORT , () => {
+    console.log("app started" , PORT);
+});
